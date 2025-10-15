@@ -1,0 +1,430 @@
+import { useState, useEffect, useMemo } from 'react'
+import { Calculator, Info, History, ChevronDown, ChevronUp } from 'lucide-react'
+import { Button } from '@/components/ui/button.jsx'
+import { Input } from '@/components/ui/input.jsx'
+import { Label } from '@/components/ui/label.jsx'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
+import { Badge } from '@/components/ui/badge.jsx'
+import { calculateAQL, formatNumber, getAQLValues } from '@/lib/aqlCalculator.js'
+import './App.css'
+
+function App() {
+  // Input states
+  const [lotSize, setLotSize] = useState('1000')
+  const [inspectionType, setInspectionType] = useState('general')
+  const [inspectionLevel, setInspectionLevel] = useState('II')
+  
+  // Defect types states
+  const [criticalEnabled, setCriticalEnabled] = useState(false)
+  const [criticalAQL, setCriticalAQL] = useState('0.065')
+  const [majorEnabled, setMajorEnabled] = useState(true)
+  const [majorAQL, setMajorAQL] = useState('2.5')
+  const [minorEnabled, setMinorEnabled] = useState(true)
+  const [minorAQL, setMinorAQL] = useState('4.0')
+  
+  // UI states
+  const [showTables, setShowTables] = useState(false)
+  const [showGuide, setShowGuide] = useState(false)
+  
+  // Quick select lot sizes
+  const quickSizes = [100, 500, 1000, 5000, 10000, 50000]
+  
+  // AQL values
+  const aqlValues = getAQLValues()
+  
+  // Calculate results
+  const criticalResult = useMemo(() => {
+    if (!criticalEnabled) return null
+    const size = parseInt(lotSize) || 0
+    if (size <= 0) return null
+    return calculateAQL(size, inspectionType, inspectionLevel, criticalAQL)
+  }, [criticalEnabled, lotSize, inspectionType, inspectionLevel, criticalAQL])
+  
+  const majorResult = useMemo(() => {
+    if (!majorEnabled) return null
+    const size = parseInt(lotSize) || 0
+    if (size <= 0) return null
+    return calculateAQL(size, inspectionType, inspectionLevel, majorAQL)
+  }, [majorEnabled, lotSize, inspectionType, inspectionLevel, majorAQL])
+  
+  const minorResult = useMemo(() => {
+    if (!minorEnabled) return null
+    const size = parseInt(lotSize) || 0
+    if (size <= 0) return null
+    return calculateAQL(size, inspectionType, inspectionLevel, minorAQL)
+  }, [minorEnabled, lotSize, inspectionType, inspectionLevel, minorAQL])
+  
+  // Format lot size with thousand separators
+  const handleLotSizeChange = (e) => {
+    const value = e.target.value.replace(/,/g, '')
+    if (/^\d*$/.test(value)) {
+      setLotSize(value)
+    }
+  }
+  
+  const displayLotSize = lotSize ? formatNumber(parseInt(lotSize) || 0) : ''
+  
+  // Result card component
+  const ResultCard = ({ title, result, color, enabled, onToggle }) => {
+    if (!enabled) {
+      return (
+        <Card className={`border-2 border-dashed opacity-50 hover:opacity-100 transition-opacity cursor-pointer`} onClick={onToggle}>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>{title}</span>
+              <Badge variant="outline">已停用</Badge>
+            </CardTitle>
+            <CardDescription>點擊啟用此缺陷類型</CardDescription>
+          </CardHeader>
+        </Card>
+      )
+    }
+    
+    if (!result) {
+      return (
+        <Card className={`border-2 border-${color}-200`}>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>{title}</span>
+              <Button variant="ghost" size="sm" onClick={onToggle}>停用</Button>
+            </CardTitle>
+            <CardDescription>請輸入有效的批量大小</CardDescription>
+          </CardHeader>
+        </Card>
+      )
+    }
+    
+    return (
+      <Card className={`border-2 border-${color}-200 bg-${color}-50/30`}>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between text-lg">
+            <span>{title}</span>
+            <Button variant="ghost" size="sm" onClick={onToggle}>停用</Button>
+          </CardTitle>
+          <CardDescription>代碼字母: <strong>{result.codeLetter}</strong></CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="text-sm text-muted-foreground mb-1">樣本量</div>
+              <div className="text-3xl font-bold text-primary">{formatNumber(result.sampleSize)}</div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="text-xs text-green-700 mb-1">接受數量</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {result.acceptanceNumber !== null ? result.acceptanceNumber : 'N/A'}
+                </div>
+              </div>
+              <div className="text-center p-3 bg-red-50 rounded-lg border border-red-200">
+                <div className="text-xs text-red-700 mb-1">拒絕數量</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {result.rejectionNumber !== null ? result.rejectionNumber : 'N/A'}
+                </div>
+              </div>
+            </div>
+          </div>
+          {result.error && (
+            <div className="text-sm text-amber-600 bg-amber-50 p-2 rounded">
+              {result.error}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header */}
+      <header className="bg-white border-b shadow-sm">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-600 rounded-lg">
+                <Calculator className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">AQL 計算器</h1>
+                <p className="text-sm text-gray-600">品質檢查抽樣數量計算工具</p>
+              </div>
+            </div>
+            <Button variant="outline" onClick={() => setShowGuide(!showGuide)}>
+              <Info className="w-4 h-4 mr-2" />
+              使用說明
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Guide */}
+      {showGuide && (
+        <div className="bg-blue-50 border-b border-blue-200">
+          <div className="container mx-auto px-4 py-6">
+            <div className="prose max-w-none">
+              <h3 className="text-lg font-semibold text-blue-900 mb-3">什麼是 AQL？</h3>
+              <p className="text-sm text-blue-800 mb-4">
+                AQL（Acceptable Quality Limit，最大可接受質量限值）是一種廣泛用於確定生產訂單樣品的方法，
+                基於 ISO 2859-1 / ANSI Z1.4 國際標準，用於判斷整個產品訂單是否符合客戶的規格要求。
+              </p>
+              <h4 className="text-md font-semibold text-blue-900 mb-2">如何使用：</h4>
+              <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                <li>輸入您的批量大小（產品總數量）</li>
+                <li>選擇檢驗類型和級別（一般使用「普通檢驗 II」）</li>
+                <li>啟用需要的缺陷類型並設定對應的 AQL 值</li>
+                <li>查看計算結果：樣本量、接受數量和拒絕數量</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Left Column - Input */}
+          <div className="lg:col-span-1 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>輸入參數</CardTitle>
+                <CardDescription>設定檢驗參數以計算抽樣數量</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Lot Size */}
+                <div className="space-y-2">
+                  <Label htmlFor="lotSize">批量大小</Label>
+                  <Input
+                    id="lotSize"
+                    type="text"
+                    value={displayLotSize}
+                    onChange={handleLotSizeChange}
+                    placeholder="輸入產品總數量"
+                    className="text-lg"
+                  />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {quickSizes.map(size => (
+                      <Button
+                        key={size}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setLotSize(size.toString())}
+                        className="text-xs"
+                      >
+                        {formatNumber(size)}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Inspection Type */}
+                <div className="space-y-2">
+                  <Label>檢驗類型</Label>
+                  <Tabs value={inspectionType} onValueChange={setInspectionType}>
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="general">普通檢驗</TabsTrigger>
+                      <TabsTrigger value="special">特殊檢驗</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+
+                {/* Inspection Level */}
+                <div className="space-y-2">
+                  <Label htmlFor="inspectionLevel">檢驗級別</Label>
+                  <Select value={inspectionLevel} onValueChange={setInspectionLevel}>
+                    <SelectTrigger id="inspectionLevel">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {inspectionType === 'general' ? (
+                        <>
+                          <SelectItem value="I">I - 較少樣本</SelectItem>
+                          <SelectItem value="II">II - 標準樣本（推薦）</SelectItem>
+                          <SelectItem value="III">III - 較多樣本</SelectItem>
+                        </>
+                      ) : (
+                        <>
+                          <SelectItem value="S1">S1 - 特殊級別 1</SelectItem>
+                          <SelectItem value="S2">S2 - 特殊級別 2</SelectItem>
+                          <SelectItem value="S3">S3 - 特殊級別 3</SelectItem>
+                          <SelectItem value="S4">S4 - 特殊級別 4</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Defect Types Configuration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>缺陷類型設定</CardTitle>
+                <CardDescription>選擇需要檢驗的缺陷類型及 AQL 值</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Critical Defects */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-red-700 font-semibold">關鍵缺陷 (Critical)</Label>
+                    <Button
+                      variant={criticalEnabled ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCriticalEnabled(!criticalEnabled)}
+                    >
+                      {criticalEnabled ? '已啟用' : '啟用'}
+                    </Button>
+                  </div>
+                  {criticalEnabled && (
+                    <Select value={criticalAQL} onValueChange={setCriticalAQL}>
+                      <SelectTrigger className="border-red-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {aqlValues.map(val => (
+                          <SelectItem key={val} value={val}>AQL {val}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+
+                {/* Major Defects */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-orange-700 font-semibold">主要缺陷 (Major)</Label>
+                    <Button
+                      variant={majorEnabled ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setMajorEnabled(!majorEnabled)}
+                    >
+                      {majorEnabled ? '已啟用' : '啟用'}
+                    </Button>
+                  </div>
+                  {majorEnabled && (
+                    <Select value={majorAQL} onValueChange={setMajorAQL}>
+                      <SelectTrigger className="border-orange-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {aqlValues.map(val => (
+                          <SelectItem key={val} value={val}>AQL {val}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+
+                {/* Minor Defects */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-yellow-700 font-semibold">輕微缺陷 (Minor)</Label>
+                    <Button
+                      variant={minorEnabled ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setMinorEnabled(!minorEnabled)}
+                    >
+                      {minorEnabled ? '已啟用' : '啟用'}
+                    </Button>
+                  </div>
+                  {minorEnabled && (
+                    <Select value={minorAQL} onValueChange={setMinorAQL}>
+                      <SelectTrigger className="border-yellow-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {aqlValues.map(val => (
+                          <SelectItem key={val} value={val}>AQL {val}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column - Results */}
+          <div className="lg:col-span-2 space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold mb-4">計算結果</h2>
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <ResultCard
+                  title="關鍵缺陷"
+                  result={criticalResult}
+                  color="red"
+                  enabled={criticalEnabled}
+                  onToggle={() => setCriticalEnabled(!criticalEnabled)}
+                />
+                <ResultCard
+                  title="主要缺陷"
+                  result={majorResult}
+                  color="orange"
+                  enabled={majorEnabled}
+                  onToggle={() => setMajorEnabled(!majorEnabled)}
+                />
+                <ResultCard
+                  title="輕微缺陷"
+                  result={minorResult}
+                  color="yellow"
+                  enabled={minorEnabled}
+                  onToggle={() => setMinorEnabled(!minorEnabled)}
+                />
+              </div>
+            </div>
+
+            {/* Reference Tables */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>AQL 標準參考表</CardTitle>
+                    <CardDescription>ISO 2859-1 / ANSI Z1.4 標準表格</CardDescription>
+                  </div>
+                  <Button variant="outline" onClick={() => setShowTables(!showTables)}>
+                    {showTables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </Button>
+                </div>
+              </CardHeader>
+              {showTables && (
+                <CardContent>
+                  <div className="text-sm text-muted-foreground">
+                    <p className="mb-4">
+                      計算邏輯：首先根據批量大小和檢驗級別在表 A 中查找代碼字母，
+                      然後在表 B 中根據代碼字母和 AQL 值查找對應的樣本量、接受數量和拒絕數量。
+                    </p>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="font-semibold text-blue-900 mb-2">當前計算使用：</p>
+                      <ul className="space-y-1 text-blue-800">
+                        <li>• 批量大小: <strong>{displayLotSize || '未設定'}</strong></li>
+                        <li>• 檢驗類型: <strong>{inspectionType === 'general' ? '普通檢驗' : '特殊檢驗'}</strong></li>
+                        <li>• 檢驗級別: <strong>{inspectionLevel}</strong></li>
+                        {criticalEnabled && <li>• 關鍵缺陷 AQL: <strong>{criticalAQL}</strong></li>}
+                        {majorEnabled && <li>• 主要缺陷 AQL: <strong>{majorAQL}</strong></li>}
+                        {minorEnabled && <li>• 輕微缺陷 AQL: <strong>{minorAQL}</strong></li>}
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t mt-12">
+        <div className="container mx-auto px-4 py-6">
+          <div className="text-center text-sm text-gray-600">
+            <p>基於 ISO 2859-1 / ANSI Z1.4 國際標準</p>
+            <p className="mt-1">© 2025 AQL 計算器 - 品質檢查抽樣數量計算工具</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
+export default App
+
