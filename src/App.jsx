@@ -18,7 +18,7 @@ function App() {
   const [inspectionLevel, setInspectionLevel] = useState('II')
   
   // Defect types states
-  const [criticalEnabled, setCriticalEnabled] = useState(false)
+  const [criticalEnabled, setCriticalEnabled] = useState(true)
   const [criticalAQL, setCriticalAQL] = useState('0.065')
   const [majorEnabled, setMajorEnabled] = useState(true)
   const [majorAQL, setMajorAQL] = useState('2.5')
