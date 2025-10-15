@@ -241,12 +241,12 @@ export function TableB({ codeLetter, aqlValues, language = 'zh-TW' }) {
           </table>
         </div>
         <div className="mt-4 text-xs text-gray-600 space-y-1">
-          <p><strong>說明：</strong></p>
-          <p>• <strong>n</strong> = 樣本量（需要檢查的樣本數量）</p>
-          <p>• <strong>Ac</strong> = 接受數量（Acceptance Number，允許的最大缺陷數量）</p>
-          <p>• <strong>Re</strong> = 拒絕數量（Rejection Number，超過此數量則拒收批次）</p>
-          <p>• <strong>↑</strong> = 箭頭向上：使用上方第一個可用的抽樣計劃（更高的 AQL 值）</p>
-          <p>• <strong>↓</strong> = 箭頭向下：使用下方第一個可用的抽樣計劃（更大的樣本量）；如果樣本量等於或超過批量大小，則進行 100% 檢驗</p>
+          <p><strong>{t("notes")}:</strong></p>
+          <p>• <strong>n</strong> = {t("sampleSizeNote")}</p>
+          <p>• <strong>Ac</strong> = {t("acceptanceNumberNote")}</p>
+          <p>• <strong>Re</strong> = {t("rejectionNumberNote")}</p>
+          <p>• <strong>↑</strong> = {t("arrowUpNote")}</p>
+          <p>• <strong>↓</strong> = {t("arrowDownNote")}</p>
         </div>
       </CardContent>
     </Card>

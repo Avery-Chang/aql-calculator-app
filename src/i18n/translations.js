@@ -146,6 +146,14 @@ AQL (Acceptable Quality Limit) 是可接受品質水準，用於判斷一批產�
     explanationArrowDown: '• ↓ = 箭頭向下：使用下方第一個可用的抽樣計劃（更大的樣本量）；如果樣本量等於或超過批量大小，則進行 100% 檢驗',
     basedOn: '基於 ISO 2859-1 / ANSI Z1.4 國際標準',
     
+    // 說明區域
+    notes: '說明',
+    sampleSizeNote: '樣本量（需要檢查的樣本數量）',
+    acceptanceNumberNote: '接受數量（Acceptance Number，允許的最大缺陷數量）',
+    rejectionNumberNote: '拒絕數量（Rejection Number，超過此數量則拒收批次）',
+    arrowUpNote: '箭頭向上：使用上方第一個可用的抽樣計劃（更小的樣本量）',
+    arrowDownNote: '箭頭向下：使用下方第一個可用的抽樣計劃（更大的樣本量）；如果樣本量等於或超過批量大小，則進行 100% 檢驗',
+    
     // 其他
     close: '關閉',
   },
@@ -295,6 +303,14 @@ This calculator is based on the following international standards:
     explanationArrowUp: '• ↑ = Arrow up: Use the first available sampling plan above (smaller sample size)',
     explanationArrowDown: '• ↓ = Arrow down: Use the first available sampling plan below (larger sample size); if sample size equals or exceeds lot size, perform 100% inspection',
     basedOn: 'Based on ISO 2859-1 / ANSI Z1.4 International Standards',
+    
+    // Notes section
+    notes: 'Notes',
+    sampleSizeNote: 'Sample size (number of samples to inspect)',
+    acceptanceNumberNote: 'Acceptance Number (maximum number of defects allowed)',
+    rejectionNumberNote: 'Rejection Number (batch is rejected if defects exceed this number)',
+    arrowUpNote: 'Arrow up: Use the first available sampling plan above (smaller sample size)',
+    arrowDownNote: 'Arrow down: Use the first available sampling plan below (larger sample size); if sample size equals or exceeds lot size, perform 100% inspection',
     
     // Others
     close: 'Close',
