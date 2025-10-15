@@ -244,11 +244,19 @@ export function calculateAQL(lotSize, inspectionType, inspectionLevel, aqlValue)
     }
   }
 
+  // Check if 100% inspection is required
+  // If sample size equals or exceeds lot size, do 100 percent inspection
+  let finalSampleSize = sampleSize;
+  if (sampleSize >= lotSize) {
+    finalSampleSize = lotSize;
+  }
+
   return {
     codeLetter,
-    sampleSize,
+    sampleSize: finalSampleSize,
     acceptanceNumber: aqlPlan.ac,
-    rejectionNumber: aqlPlan.re
+    rejectionNumber: aqlPlan.re,
+    is100PercentInspection: sampleSize >= lotSize
   };
 }
 
