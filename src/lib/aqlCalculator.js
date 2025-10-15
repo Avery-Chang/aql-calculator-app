@@ -220,40 +220,29 @@ function findSamplingPlan(sampleSize, aqlValue, lotSize) {
     }
 
     if (currentPlan === '↑') {
-      // Arrow up: use first sampling plan above (higher AQL value)
-      const currentIndex = aqlValuesInOrder.indexOf(currentAqlValue);
+      // Arrow up: use first sampling plan above (smaller sample size) in the same AQL column
+      const currentSizeIndex = sampleSizesInOrder.indexOf(currentSampleSize);
       let found = false;
-      for (let i = currentIndex + 1; i < aqlValuesInOrder.length; i++) {
-        const nextPlan = samplingPlans[currentSampleSize][aqlValuesInOrder[i]];
-        if (typeof nextPlan === 'object' && nextPlan !== null && 'ac' in nextPlan) {
-          currentPlan = nextPlan;
-          currentAqlValue = aqlValuesInOrder[i];
+      for (let i = currentSizeIndex - 1; i >= 0; i--) {
+        const prevSampleSize = sampleSizesInOrder[i];
+        const prevPlan = samplingPlans[prevSampleSize][currentAqlValue];
+        if (typeof prevPlan === 'object' && prevPlan !== null && 'ac' in prevPlan) {
+          currentPlan = prevPlan;
+          currentSampleSize = prevSampleSize;
           found = true;
           break;
-        } else if (nextPlan === '↑') {
-          // Continue searching
+        } else if (prevPlan === '↑') {
+          // Continue searching upward
           continue;
-        } else if (nextPlan === '↓') {
-          // Follow arrow down
-          currentPlan = nextPlan;
-          currentAqlValue = aqlValuesInOrder[i];
+        } else if (prevPlan === '↓') {
+          // Follow arrow down from this position
+          currentSampleSize = prevSampleSize;
+          currentPlan = prevPlan;
           found = true;
           break;
         }
       }
-      if (!found) {
-        // If no higher AQL found, use the last valid plan in current sample size (highest valid AQL)
-        for (let i = currentIndex - 1; i >= 0; i--) {
-          const prevPlan = samplingPlans[currentSampleSize][aqlValuesInOrder[i]];
-          if (typeof prevPlan === 'object' && prevPlan !== null && 'ac' in prevPlan) {
-            currentPlan = prevPlan;
-            currentAqlValue = aqlValuesInOrder[i];
-            found = true;
-            break;
-          }
-        }
-        if (!found) return null;
-      }
+      if (!found) return null;
     } else if (currentPlan === '↓') {
       // Arrow down: use first sampling plan below (larger sample size)
       const currentSizeIndex = sampleSizesInOrder.indexOf(currentSampleSize);
@@ -267,13 +256,10 @@ function findSamplingPlan(sampleSize, aqlValue, lotSize) {
           found = true;
           break;
         } else if (nextPlan === '↓') {
-          // Continue searching
-          currentSampleSize = nextSampleSize;
-          currentPlan = nextPlan;
-          found = true;
-          break;
+          // Continue searching downward
+          continue;
         } else if (nextPlan === '↑') {
-          // Follow arrow up
+          // Follow arrow up from this position
           currentSampleSize = nextSampleSize;
           currentPlan = nextPlan;
           found = true;
