@@ -406,12 +406,12 @@ function App() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <p className="font-semibold text-blue-900 mb-2">{t("currentCalculation")}</p>
                       <ul className="space-y-1 text-blue-800">
-                        <li>• 批量大小: <strong>{displayLotSize || t("notSet")}</strong></li>
-                        <li>• 檢驗類型: <strong>{inspectionType === 'general' ? t("normalInspection") : t("specialInspection")}</strong></li>
-                        <li>• 檢驗級別: <strong>{inspectionLevel}</strong></li>
-                        {criticalEnabled && <li>• 關鍵缺陷 AQL: <strong>{criticalAQL}</strong></li>}
-                        {majorEnabled && <li>• 主要缺陷 AQL: <strong>{majorAQL}</strong></li>}
-                        {minorEnabled && <li>• 輕微缺陷 AQL: <strong>{minorAQL}</strong></li>}
+                        <li>• {t("lotSize")}: <strong>{displayLotSize || t("notSet")}</strong></li>
+                        <li>• {t("inspectionType")}: <strong>{inspectionType === 'general' ? t("normalInspection") : t("specialInspection")}</strong></li>
+                        <li>• {t("inspectionLevel")}: <strong>{inspectionLevel}</strong></li>
+                        {criticalEnabled && <li>• {t("criticalDefect")} AQL: <strong>{criticalAQL}</strong></li>}
+                        {majorEnabled && <li>• {t("majorDefect")} AQL: <strong>{majorAQL}</strong></li>}
+                        {minorEnabled && <li>• {t("minorDefect")} AQL: <strong>{minorAQL}</strong></li>}
                       </ul>
                     </div>
                   </div>
