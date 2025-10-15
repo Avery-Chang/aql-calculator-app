@@ -83,7 +83,7 @@ function App() {
               <span>{title}</span>
               <Badge variant="outline">{t("disabled")}</Badge>
             </CardTitle>
-            <CardDescription>點擊啟用此缺陷類型</CardDescription>
+            <CardDescription>{t("clickToEnable")}</CardDescription>
           </CardHeader>
         </Card>
       )
@@ -97,7 +97,7 @@ function App() {
               <span>{title}</span>
               <Button variant="ghost" size="sm" onClick={onToggle}>停用</Button>
             </CardTitle>
-            <CardDescription>請輸入有效的批量大小</CardDescription>
+            <CardDescription>{t("enterValidLotSize")}</CardDescription>
           </CardHeader>
         </Card>
       )
@@ -110,7 +110,7 @@ function App() {
             <span>{title}</span>
             <Button variant="ghost" size="sm" onClick={onToggle}>停用</Button>
           </CardTitle>
-          <CardDescription>代碼字母: <strong>{result.codeLetter}</strong></CardDescription>
+          <CardDescription>{t("codeLetter")}: <strong>{result.codeLetter}</strong></CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
@@ -249,16 +249,16 @@ function App() {
                     <SelectContent>
                       {inspectionType === 'general' ? (
                         <>
-                          <SelectItem value="I">I - 較少樣本</SelectItem>
+                          <SelectItem value="I">{t("levelI")}</SelectItem>
                           <SelectItem value="II">{t("levelII")}</SelectItem>
-                          <SelectItem value="III">III - 較多樣本</SelectItem>
+                          <SelectItem value="III">{t("levelIII")}</SelectItem>
                         </>
                       ) : (
                         <>
-                          <SelectItem value="S1">S1 - 特殊級別 1</SelectItem>
-                          <SelectItem value="S2">S2 - 特殊級別 2</SelectItem>
-                          <SelectItem value="S3">S3 - 特殊級別 3</SelectItem>
-                          <SelectItem value="S4">S4 - 特殊級別 4</SelectItem>
+                          <SelectItem value="S1">{t("levelS1")}</SelectItem>
+                          <SelectItem value="S2">{t("levelS2")}</SelectItem>
+                          <SelectItem value="S3">{t("levelS3")}</SelectItem>
+                          <SelectItem value="S4">{t("levelS4")}</SelectItem>
                         </>
                       )}
                     </SelectContent>

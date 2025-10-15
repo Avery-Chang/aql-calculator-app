@@ -98,6 +98,10 @@ AQL (Acceptable Quality Limit) 是可接受品質水準，用於判斷一批產�
     unableToFindPlan: 'Unable to find sampling plan',
     fullInspection: '100% 檢驗',
     
+    // ResultCard
+    clickToEnable: '點擊啟用此缺陷類型',
+    enterValidLotSize: '請輸入有效的批量大小',
+    
     // 其他
     close: '關閉',
   },
@@ -199,6 +203,10 @@ This calculator is based on the following international standards:
     // Error messages
     unableToFindPlan: 'Unable to find sampling plan',
     fullInspection: '100% Inspection',
+    
+    // ResultCard
+    clickToEnable: 'Click to enable this defect type',
+    enterValidLotSize: 'Please enter a valid lot size',
     
     // Others
     close: 'Close',
