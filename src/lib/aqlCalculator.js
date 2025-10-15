@@ -216,15 +216,32 @@ export function calculateAQL(lotSize, inspectionType, inspectionLevel, aqlValue)
     return null;
   }
 
-  const aqlPlan = plan[aqlValue];
+  let aqlPlan = plan[aqlValue];
+  
+  // If AQL plan is null (arrow up in table), find the first available plan above
   if (!aqlPlan) {
-    return {
-      codeLetter,
-      sampleSize,
-      acceptanceNumber: null,
-      rejectionNumber: null,
-      error: 'AQL value not available for this sample size'
-    };
+    const aqlValues = ['0.065', '0.10', '0.15', '0.25', '0.40', '0.65', '1.0', '1.5', '2.5', '4.0', '6.5'];
+    const currentIndex = aqlValues.indexOf(aqlValue);
+    
+    // Search upward (higher AQL values) for the first available plan
+    for (let i = currentIndex + 1; i < aqlValues.length; i++) {
+      const upperPlan = plan[aqlValues[i]];
+      if (upperPlan) {
+        aqlPlan = upperPlan;
+        break;
+      }
+    }
+    
+    // If still not found, return error
+    if (!aqlPlan) {
+      return {
+        codeLetter,
+        sampleSize,
+        acceptanceNumber: null,
+        rejectionNumber: null,
+        error: 'AQL value not available for this sample size'
+      };
+    }
   }
 
   return {
