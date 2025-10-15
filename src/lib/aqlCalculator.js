@@ -241,7 +241,19 @@ function findSamplingPlan(sampleSize, aqlValue, lotSize) {
           break;
         }
       }
-      if (!found) return null;
+      if (!found) {
+        // If no higher AQL found, use the last valid plan in current sample size (highest valid AQL)
+        for (let i = currentIndex - 1; i >= 0; i--) {
+          const prevPlan = samplingPlans[currentSampleSize][aqlValuesInOrder[i]];
+          if (typeof prevPlan === 'object' && prevPlan !== null && 'ac' in prevPlan) {
+            currentPlan = prevPlan;
+            currentAqlValue = aqlValuesInOrder[i];
+            found = true;
+            break;
+          }
+        }
+        if (!found) return null;
+      }
     } else if (currentPlan === '↓') {
       // Arrow down: use first sampling plan below (larger sample size)
       const currentSizeIndex = sampleSizesInOrder.indexOf(currentSampleSize);
