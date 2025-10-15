@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
+import { getTranslation } from '@/i18n/translations.js'
 
 // Table A Component - Sample Size Code Letters
-export function TableA({ lotSize, inspectionType, inspectionLevel }) {
+export function TableA({ lotSize, inspectionType, inspectionLevel, language = "zh-TW" }) {
+  const t = (key) => getTranslation(language, key);
   // Define lot size ranges
   const lotRanges = [
     { min: 2, max: 8, label: '2 to 8' },
@@ -45,20 +47,20 @@ export function TableA({ lotSize, inspectionType, inspectionLevel }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">表 A - 樣本大小代碼字母</CardTitle>
+        <CardTitle className="text-lg">{t("tableATitle")}</CardTitle>
         <CardDescription>
-          根據批量大小和檢驗級別查找代碼字母
+          {t("tableADesc")}
           <span className="block mt-1 text-xs">
-            來源：ISO 2859-1:1999 / ANSI/ASQ Z1.4-2003
+            {t("tableASource")}
           </span>
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div>
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="border-b-2 border-gray-300">
-                <th className="p-2 text-left font-semibold bg-gray-50">批量大小</th>
+                <th className="p-2 text-left font-semibold bg-gray-50">{t("lotSize")}</th>
                 {levels.map(level => (
                   <th 
                     key={level} 
@@ -84,7 +86,7 @@ export function TableA({ lotSize, inspectionType, inspectionLevel }) {
                     <td className="p-2">
                       {range.label}
                       {isCurrentRow && (
-                        <Badge variant="outline" className="ml-2 text-xs">當前</Badge>
+                        <Badge variant="outline" className="ml-2 text-xs">{t("current")}</Badge>
                       )}
                     </td>
                     {levels.map((level, levelIdx) => {
@@ -113,7 +115,8 @@ export function TableA({ lotSize, inspectionType, inspectionLevel }) {
 }
 
 // Table B Component - Single Sampling Plans
-export function TableB({ codeLetter, aqlValues }) {
+export function TableB({ codeLetter, aqlValues, language = 'zh-TW' }) {
+  const t = (key) => getTranslation(language, key);
   // Sample sizes for each code letter
   const sampleSizes = {
     'A': 2, 'B': 3, 'C': 5, 'D': 8, 'E': 13, 'F': 20, 'G': 32, 'H': 50,
@@ -149,17 +152,17 @@ export function TableB({ codeLetter, aqlValues }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">表 B - 單次抽樣計劃（正常檢驗）</CardTitle>
+        <CardTitle className="text-lg">{t("tableBTitle")}</CardTitle>
         <CardDescription>
-          根據代碼字母和 AQL 值查找接受數量 (Ac) 和拒絕數量 (Re)
+          {t("tableBDesc")}
           <span className="block mt-1 text-xs">
-            來源：ISO 2859-1:1999 / ANSI/ASQ Z1.4-2003
+            {t("tableASource")}
           </span>
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+        <div>
+          <table className="w-full text-[10px] border-collapse table-fixed">
             <thead>
               <tr className="border-b-2 border-gray-300">
                 <th className="p-2 text-left font-semibold bg-gray-50 sticky left-0">代碼</th>

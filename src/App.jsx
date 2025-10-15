@@ -95,7 +95,7 @@ function App() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>{title}</span>
-              <Button variant="ghost" size="sm" onClick={onToggle}>停用</Button>
+              <Button variant="ghost" size="sm" onClick={onToggle}>{t("disable")}</Button>
             </CardTitle>
             <CardDescription>{t("enterValidLotSize")}</CardDescription>
           </CardHeader>
@@ -108,7 +108,7 @@ function App() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between text-lg">
             <span>{title}</span>
-            <Button variant="ghost" size="sm" onClick={onToggle}>停用</Button>
+            <Button variant="ghost" size="sm" onClick={onToggle}>{t("disable")}</Button>
           </CardTitle>
           <CardDescription>{t("codeLetter")}: <strong>{result.codeLetter}</strong></CardDescription>
         </CardHeader>
@@ -181,10 +181,10 @@ function App() {
               </p>
               <h4 className="text-md font-semibold text-blue-900 mb-2">如何使用：</h4>
               <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
-                <li>輸入您的批量大小（產品總數量）</li>
-                <li>選擇檢驗類型和級別（一般使用「普通檢驗 II」）</li>
-                <li>啟用需要的缺陷類型並設定對應的 AQL 值</li>
-                <li>查看計算結果：樣本量、接受數量和拒絕數量</li>
+                <li>{t("step1")}</li>
+                <li>{t("step2")}</li>
+                <li>{t("step3")}</li>
+                <li>{t("step4")}</li>
               </ol>
             </div>
           </div>
@@ -271,7 +271,7 @@ function App() {
             <Card>
               <CardHeader>
                 <CardTitle>{t("defectTypes")}</CardTitle>
-                <CardDescription>選擇需要檢驗的缺陷類型及 AQL 值</CardDescription>
+                <CardDescription>{t("selectDefectTypes")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Critical Defects */}
@@ -283,7 +283,7 @@ function App() {
                       size="sm"
                       onClick={() => setCriticalEnabled(!criticalEnabled)}
                     >
-                      {criticalEnabled ? '已啟用' : '啟用'}
+                      {criticalEnabled ? t("enabled_status") : t("enable")}
                     </Button>
                   </div>
                   {criticalEnabled && (
@@ -309,7 +309,7 @@ function App() {
                       size="sm"
                       onClick={() => setMajorEnabled(!majorEnabled)}
                     >
-                      {majorEnabled ? '已啟用' : '啟用'}
+                      {majorEnabled ? t("enabled_status") : t("enable")}
                     </Button>
                   </div>
                   {majorEnabled && (
@@ -335,7 +335,7 @@ function App() {
                       size="sm"
                       onClick={() => setMinorEnabled(!minorEnabled)}
                     >
-                      {minorEnabled ? '已啟用' : '啟用'}
+                      {minorEnabled ? t("enabled_status") : t("enable")}
                     </Button>
                   </div>
                   {minorEnabled && (
@@ -361,21 +361,21 @@ function App() {
               <h2 className="text-xl font-semibold mb-4">{t("results")}</h2>
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 <ResultCard
-                  title="關鍵缺陷"
+                  title={t("criticalDefectTitle")}
                   result={criticalResult}
                   color="red"
                   enabled={criticalEnabled}
                   onToggle={() => setCriticalEnabled(!criticalEnabled)}
                 />
                 <ResultCard
-                  title="主要缺陷"
+                  title={t("majorDefectTitle")}
                   result={majorResult}
                   color="orange"
                   enabled={majorEnabled}
                   onToggle={() => setMajorEnabled(!majorEnabled)}
                 />
                 <ResultCard
-                  title="輕微缺陷"
+                  title={t("minorDefectTitle")}
                   result={minorResult}
                   color="yellow"
                   enabled={minorEnabled}
@@ -401,14 +401,13 @@ function App() {
                 <CardContent className="space-y-6">
                   <div className="text-sm text-muted-foreground">
                     <p className="mb-4">
-                      計算邏輯：首先根據批量大小和檢驗級別在表 A 中查找代碼字母，
-                      然後在表 B 中根據代碼字母和 AQL 值查找對應的樣本量、接受數量和拒絕數量。
+                      {t("calculationLogic")}
                     </p>
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <p className="font-semibold text-blue-900 mb-2">當前計算使用：</p>
+                      <p className="font-semibold text-blue-900 mb-2">{t("currentCalculation")}</p>
                       <ul className="space-y-1 text-blue-800">
-                        <li>• 批量大小: <strong>{displayLotSize || '未設定'}</strong></li>
-                        <li>• 檢驗類型: <strong>{inspectionType === 'general' ? '普通檢驗' : '特殊檢驗'}</strong></li>
+                        <li>• 批量大小: <strong>{displayLotSize || t("notSet")}</strong></li>
+                        <li>• 檢驗類型: <strong>{inspectionType === 'general' ? t("normalInspection") : t("specialInspection")}</strong></li>
                         <li>• 檢驗級別: <strong>{inspectionLevel}</strong></li>
                         {criticalEnabled && <li>• 關鍵缺陷 AQL: <strong>{criticalAQL}</strong></li>}
                         {majorEnabled && <li>• 主要缺陷 AQL: <strong>{majorAQL}</strong></li>}
@@ -422,10 +421,12 @@ function App() {
                     lotSize={parseInt(lotSize) || 0}
                     inspectionType={inspectionType}
                     inspectionLevel={inspectionLevel}
+                    language={language}
                   />
 
                   {/* Table B */}
                   <TableB 
+                    language={language}
                     codeLetter={(
                       criticalResult?.codeLetter || 
                       majorResult?.codeLetter || 
