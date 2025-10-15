@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { calculateAQL, formatNumber, getAQLValues } from '@/lib/aqlCalculator.js'
+import { TableA, TableB } from '@/components/AQLTables.jsx'
 import './App.css'
 
 function App() {
@@ -388,7 +389,7 @@ function App() {
                 </div>
               </CardHeader>
               {showTables && (
-                <CardContent>
+                <CardContent className="space-y-6">
                   <div className="text-sm text-muted-foreground">
                     <p className="mb-4">
                       計算邏輯：首先根據批量大小和檢驗級別在表 A 中查找代碼字母，
@@ -406,6 +407,27 @@ function App() {
                       </ul>
                     </div>
                   </div>
+
+                  {/* Table A */}
+                  <TableA 
+                    lotSize={parseInt(lotSize) || 0}
+                    inspectionType={inspectionType}
+                    inspectionLevel={inspectionLevel}
+                  />
+
+                  {/* Table B */}
+                  <TableB 
+                    codeLetter={(
+                      criticalResult?.codeLetter || 
+                      majorResult?.codeLetter || 
+                      minorResult?.codeLetter
+                    )}
+                    aqlValues={[
+                      criticalEnabled && criticalAQL,
+                      majorEnabled && majorAQL,
+                      minorEnabled && minorAQL
+                    ].filter(Boolean)}
+                  />
                 </CardContent>
               )}
             </Card>
