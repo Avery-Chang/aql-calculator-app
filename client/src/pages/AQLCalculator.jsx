@@ -16,17 +16,34 @@ import { getTranslation } from '@/i18n/translations.js'
 
 export default function AQLCalculator() {
   // Language state with localStorage persistence
-  const [language, setLanguage] = useState(() => {
-    // Try to get saved language from localStorage
-    const savedLanguage = localStorage.getItem('aql-calculator-language')
-    return savedLanguage || 'zh-TW'
-  })
+  const [language, setLanguage] = useState('zh-TW')
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false)
   const t = (key) => getTranslation(language, key)
+  
+  // Load language from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedLanguage = localStorage.getItem('aql-calculator-language')
+      if (savedLanguage && savedLanguage !== language) {
+        setLanguage(savedLanguage)
+      }
+    } catch (e) {
+      console.warn('Failed to load language:', e)
+    } finally {
+      setIsLanguageLoaded(true)
+    }
+  }, [])
   
   // Save language preference to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('aql-calculator-language', language)
-  }, [language])
+    if (isLanguageLoaded) {
+      try {
+        localStorage.setItem('aql-calculator-language', language)
+      } catch (e) {
+        console.warn('Failed to save language:', e)
+      }
+    }
+  }, [language, isLanguageLoaded])
   
   // Input states
   const [lotSize, setLotSize] = useState('1000')
