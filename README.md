@@ -1,162 +1,256 @@
-# AQL 計算器 - 品質檢查抽樣數量計算工具
+# Web App Template (Static Frontend)
 
-一個現代化、直觀且功能完善的 AQL（Acceptable Quality Limit，最大可接受質量限值）計算器網頁應用，基於 ISO 2859-1 / ANSI Z1.4 國際標準。
+Pure React + Tailwind template with shadcn/ui baked in. **Use this README as the checklist for shipping static experiences.**
 
-## 功能特色
-
-### 核心功能
-
-- **批量大小計算**：支援輸入任意批量大小，自動計算所需的抽樣數量
-
-- **多種檢驗級別**：
-  - 普通檢驗：I、II、III 級別
-  - 特殊檢驗：S1、S2、S3、S4 級別
-
-- **三種缺陷類型**：
-  - 關鍵缺陷（Critical）
-  - 主要缺陷（Major）
-  - 輕微缺陷（Minor）
-
-- **靈活的 AQL 設定**：支援 0.065 到 6.5 的多個 AQL 值選擇
-
-- **即時計算**：輸入變更時自動重新計算結果
-
-### 計算結果
-
-對每種啟用的缺陷類型，系統會顯示：
-
-- **樣本量**（Sample Size）：需要檢查的樣本數量
-
-- **接受數量**（Acceptance Number）：允許的最大缺陷數量
-
-- **拒絕數量**（Rejection Number）：超過此數量則拒收批次
-
-- **代碼字母**：ISO 標準中使用的樣本大小代碼
-
-### UI/UX 特色
-
-- **現代化設計**：清晰的視覺層次，專業的色彩系統
-
-- **響應式佈局**：完美適配桌面、平板和手機螢幕
-
-- **直觀操作**：簡單易用的介面，無需專業知識即可上手
-
-- **即時反饋**：輸入驗證和計算結果的即時更新
-
-- **使用說明**：內建詳細的使用指南和 AQL 概念說明
-
-- **快速選擇**：提供常用批量大小的快速選擇按鈕
-
-## 技術架構
-
-- **前端框架**：React 18
-
-- **UI 組件**：shadcn/ui + Tailwind CSS
-
-- **圖標**：Lucide React
-
-- **構建工具**：Vite
-
-- **標準依據**：ISO 2859-1 / ANSI Z1.4
-
-## 使用方法
-
-### 基本步驟
-
-1. **輸入批量大小**：在「批量大小」欄位輸入您的產品總數量，或使用快速選擇按鈕
-
-1. **選擇檢驗類型**：選擇「普通檢驗」或「特殊檢驗」
-
-1. **選擇檢驗級別**：一般情況下推薦使用「II - 標準樣本」
-
-1. **設定缺陷類型**：
-  - 啟用需要檢驗的缺陷類型（關鍵、主要、輕微）
-  - 為每種缺陷類型選擇適當的 AQL 值
-
-1. **查看結果**：系統會自動計算並顯示每種缺陷類型的抽樣結果
-
-### AQL 值選擇建議
-
-- **關鍵缺陷**：通常使用 0.065 或 0.10（最嚴格）
-
-- **主要缺陷**：通常使用 1.5 或 2.5
-
-- **輕微缺陷**：通常使用 4.0 或 6.5（較寬鬆）
-
-## 計算邏輯
-
-系統採用兩步驟計算方法：
-
-1. **查找代碼字母**（表 A）：根據批量大小和檢驗級別，在標準表 A 中查找對應的樣本大小代碼字母
-
-1. **確定抽樣計劃**（表 B）：根據代碼字母和 AQL 值，在標準表 B 中查找對應的樣本量、接受數量和拒絕數量
-
-## 相比參考網站的改進
-
-### 視覺設計
-
-- 採用現代化的卡片式設計，視覺層次更清晰
-
-- 使用色彩區分不同缺陷類型，提高識別度
-
-- 響應式佈局，完美適配各種設備
-
-### 互動體驗
-
-- 即時計算和反饋，無需點擊計算按鈕
-
-- 提供快速選擇按鈕，加快輸入速度
-
-- 支援啟用/停用缺陷類型，更靈活的使用方式
-
-### 功能增強
-
-- 內建詳細的使用說明和 AQL 概念介紹
-
-- 顯示計算過程中使用的代碼字母
-
-- 友善的錯誤提示（如 AQL 值不適用於當前樣本量）
-
-### 可用性
-
-- 批量大小自動格式化（千位分隔符）
-
-- 清晰的標籤和說明文字
-
-- 符合無障礙設計標準
-
-## 開發和部署
-
-### 本地開發
-
-```bash
-# 安裝依賴
-pnpm install
-
-# 啟動開發伺服器
-pnpm run dev
-
-# 構建生產版本
-pnpm run build
-```
-
-### 部署
-
-應用已部署到公開網路，可通過永久網址訪問。
-
-## 標準參考
-
-本計算器嚴格遵循以下國際標準：
-
-- ISO 2859-1：Sampling procedures for inspection by attributes
-
-- ANSI/ASQ Z1.4-2008：Sampling Procedures and Tables for Inspection by Attributes
-
-## 許可證
-
-© 2025 AQL 計算器 - 品質檢查抽樣數量計算工具
+> **Note:** This template includes a minimal `shared/` and `server/` directory with placeholder types to support imported templates. These are just compatibility placeholders - web-static remains a true static-only template without API functionality.
 
 ---
 
-**注意**：本工具僅供參考使用，實際檢驗應遵循相關行業標準和客戶要求。
+## 🤖 AI Development Guide
 
+### Stack Overview
+- Client-only routing powered by React + Wouter.
+- Design tokens are provided through `client/src/index.css` and `tailwind.config.ts`—keep them intact.
+
+### Component Patterns
+
+```tsx
+// Compose pages from shadcn/ui primitives
+import { Button } from "@/components/ui/button";
+
+export function Hero() {
+  return (
+    <section className="rounded-3xl bg-white p-10 shadow-xl">
+      <h1 className="text-4xl font-bold text-slate-900">Launch Quickly</h1>
+      <Button size="lg" className="mt-6">Get Started</Button>
+    </section>
+  );
+}
+```
+
+### File Structure
+
+```
+client/
+  public/         ← Static assets copied verbatim to '/'
+  src/
+    pages/        ← Page-level components
+    components/   ← Reusable UI & shadcn/ui
+    contexts/     ← React contexts
+    hooks/        ← Custom React hooks
+    lib/          ← Utility helpers
+    App.tsx       ← Routes & top-level layout
+    main.tsx      ← React entry point
+    index.css     ← global style
+server/         ← Placeholder for imported template compatibility
+shared/         ← Placeholder for imported template compatibility
+  const.ts      ← Shared constants
+```
+
+Assets placed under `client/public` are served with aggressive caching, so add a content hash to filenames (for example, `logo.3fa9b2e4.svg`) whenever you replace a file and update its references to avoid stale assets.
+
+Files in `client/public` are available at the root of your site—reference them with absolute paths (`/logo.3fa9b2e4.svg`, `/robots.txt`, etc.) from HTML templates, JSX, or meta tags.
+
+---
+
+## 🎯 Development Workflow
+
+1. **Compose pages** in `client/src/pages/`. Keep sections modular so they can be reused across routes.
+2. **Share primitives** via `client/src/components/`—extend shadcn/ui when needed instead of duplicating markup.
+3. **Keep styling consistent** by relying on existing Tailwind tokens (spacing, colors, typography).
+4. **Fetch external data** with `useEffect` if the site needs dynamic content from public APIs.
+
+---
+
+## 🧱 Tailwind Safeguards
+
+- Preserve the `@layer base` block in `client/src/index.css`; removing it breaks utilities like `border-border`.
+- Do not strip values from `theme.extend` in `tailwind.config.ts`—they power the design tokens used in the UI kit.
+- Stick to utility classes for responsiveness (mobile-first by default).
+
+---
+
+## Core Files
+
+`client/src/App.tsx`
+```tsx
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFound from "@/pages/NotFound";
+import { Route, Switch } from "wouter";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import Home from "./pages/Home";
+
+function Router() {
+  return (
+    <Switch>
+      <Route path={"/"} component={Home} />
+      <Route path={"/404"} component={NotFound} />
+      {/* Final fallback route */}
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+
+// NOTE: About Theme
+// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
+//   to keep consistent foreground/background color across components
+// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider
+        defaultTheme="light"
+        // switchable
+      >
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+}
+
+export default App;
+```
+
+`client/src/pages/Home.tsx`
+```tsx
+import { Button } from "@/components/ui/button";
+import { APP_LOGO, APP_TITLE } from "@/const";
+
+/**
+ * Build polished static experiences. Visit the README for the full playbook.
+ * All content in this page are only for example, delete if unneeded
+ */
+export default function Home() {
+  // If theme is switchable in App.tsx, we can implement theme toggling like this:
+  // const { theme, toggleTheme } = useTheme();
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header className="w-full border-b px-4 flex items-center h-16">
+        <div className="flex items-center gap-2">
+          <img
+            src={APP_LOGO}
+            className="h-8 w-8 rounded-lg border-border bg-background object-cover"
+          />
+          <span className="text-xl font-bold">{APP_TITLE}</span>
+        </div>
+      </header>
+      <main>
+        Example Page
+        <Button variant="default">Example Button</Button>
+      </main>
+    </div>
+  );
+}
+```
+---
+
+## ✅ Launch Checklist
+- [ ] UI layout and navigation structure correct, all image src valid.
+- [ ] Success + error paths verified in the browser
+
+---
+
+## 🎨 Frontend Best Practices (shadcn-first)
+
+- Prefer shadcn/ui components for interactions to keep a modern, consistent look; import from `@/components/ui/*` (e.g., `button`, `card`, `dialog`).
+- Compose Tailwind utilities with component variants for layout and states; avoid excessive custom CSS. Use built-in `variant`, `size`, etc. where available.
+- Preserve design tokens: keep the `@layer base` rules in `client/src/index.css`. Utilities like `border-border` and `font-sans` depend on them.
+- Consistent design language: use spacing, radius, shadows, and typography via tokens. Extract shared UI into `components/` for reuse instead of copy‑paste.
+- Accessibility and responsiveness: keep visible focus rings and ensure keyboard reachability; design mobile‑first with thoughtful breakpoints.
+- Theming: Choose dark/light theme to start with for ThemeProvider according to your design style (dark or light bg), then manage colors pallette with CSS variables in `client/src/index.css` instead of hard‑coding to keep global consistency;
+- Micro‑interactions and empty states: add motion, empty states, and icons tastefully to improve quality without distracting from content.
+- Navigation: Design clear and intuitive navigation structure appropriate for the app type (e.g., top/side nav for multi-page apps, breadcrumbs or contextual navigation for SPAs)'. When building dashboard-like experience, use sidebar-nav to keep all page entry easy to access.
+
+**React component rules:**
+- Never call setState/navigation in render phase → wrap in `useEffect`
+
+---
+
+## Common Pitfalls
+
+### Infinite loading loops from unstable references
+**Anti-pattern:** Creating new objects/arrays in render that are used as query inputs
+```tsx
+// ❌ Bad: New Date() creates new reference every render → infinite queries
+const { data } = trpc.items.getByDate.useQuery({
+  date: new Date(), // ← New object every render!
+});
+
+// ❌ Bad: Array/object literals in query input
+const { data } = trpc.items.getByIds.useQuery({
+  ids: [1, 2, 3], // ← New array reference every render!
+});
+```
+
+**Correct approach:** Stabilize references with useState/useMemo
+```tsx
+// ✅ Good: Initialize once with useState
+const [date] = useState(() => new Date());
+const { data } = trpc.items.getByDate.useQuery({ date });
+
+// ✅ Good: Memoize complex inputs
+const ids = useMemo(() => [1, 2, 3], []);
+const { data } = trpc.items.getByIds.useQuery({ ids });
+```
+
+**Why this happens:** TRPC queries trigger when input references change. Objects/arrays created in render have new references each time, causing infinite re-fetches.
+
+### Navigation dead-ends in subpages
+**Problem:** Creating nested routes without escape routes—no header nav, no sidebar, no back button.
+
+**Solution:** Choose navigation based on app structure:
+```tsx
+// For dashboard/multi-section apps: Use persistent sidebar (from shadcn/ui)
+import { SidebarProvider, Sidebar, SidebarContent, SidebarInset } from "@/components/ui/sidebar";
+
+<SidebarProvider>
+  <Sidebar>
+    <SidebarContent>
+      {/* Navigation menu items - always visible */}
+    </SidebarContent>
+  </Sidebar>
+  <SidebarInset>
+    {children}  {/* Page content */}
+  </SidebarInset>
+</SidebarProvider>
+
+// For linear flows (detail pages, wizards): Use back button
+import { useRouter } from "wouter";
+
+const router = useRouter();
+<div>
+  <Button variant="ghost" onClick={() => router.back()}>
+    ← Back
+  </Button>
+  <ItemDetailPage />
+</div>
+```
+
+### Dark mode styling without theme configuration
+**Problem:** Using dark foreground colors without setting the theme, making text invisible on default light backgrounds.
+
+**Solution:** Set `defaultTheme="dark"` in App.tsx, then update CSS variables in `index.css`:
+```tsx
+// App.tsx: Set the default theme first
+<ThemeProvider defaultTheme="dark">  {/* Applies .dark class to root */}
+  <div className="text-foreground bg-background">
+    Content  {/* Now uses dark theme CSS variables */}
+  </div>
+</ThemeProvider>
+```
+
+```css
+/* index.css: Adjust color palette for dark theme */
+.dark {
+  --background: oklch(0.145 0 0);  /* Dark background */
+  --foreground: oklch(0.985 0 0);  /* Light text */
+  /* ... other variables ... */
+}
+```
