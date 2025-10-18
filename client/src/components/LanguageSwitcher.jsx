@@ -7,13 +7,19 @@ const LanguageSwitcher = ({ currentLang, onLanguageChange }) => {
     { code: 'en', label: 'English', flag: '🇺🇸' }
   ];
 
+  const handleChange = (e) => {
+    const newLang = e.target.value;
+    console.log('Language change triggered:', newLang);
+    onLanguageChange(newLang);
+  };
+
   return (
     <div className="relative inline-block">
       <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm border border-gray-200 hover:border-blue-300 transition-colors">
         <Globe className="w-4 h-4 text-gray-600" />
         <select
           value={currentLang}
-          onChange={(e) => onLanguageChange(e.target.value)}
+          onChange={handleChange}
           className="bg-transparent border-none outline-none cursor-pointer text-sm font-medium text-gray-700"
         >
           {languages.map((lang) => (
