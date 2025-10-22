@@ -17,66 +17,8 @@
       src="https://manus-analytics.com/umami"
       data-website-id="f735d767-8b68-4b8f-8f5b-f740553b0925"
     ></script>
-    <style>
-      /* Hide Manus watermark */
-      .manus-watermark-hidden {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-    </style>
-    <script>
-      // Remove Manus watermark dynamically
-      (function() {
-        function removeWatermark() {
-          // Find and hide elements containing "Made with Manus"
-          const allElements = document.querySelectorAll('button, a, div, span');
-          allElements.forEach(el => {
-            const text = el.textContent || '';
-            if (text.includes('Made with') || text.includes('Manus')) {
-              // Check if it's in the bottom right corner
-              const rect = el.getBoundingClientRect();
-              const isBottomRight = rect.right > window.innerWidth - 300 && rect.bottom > window.innerHeight - 100;
-              
-              if (isBottomRight || el.tagName === 'BUTTON' || el.tagName === 'A') {
-                el.classList.add('manus-watermark-hidden');
-                if (el.parentElement) {
-                  el.parentElement.classList.add('manus-watermark-hidden');
-                }
-              }
-            }
-          });
-        }
-        
-        // Run on page load
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', removeWatermark);
-        } else {
-          removeWatermark();
-        }
-        
-        // Run periodically to catch dynamically added elements
-        setInterval(removeWatermark, 1000);
-        
-        // Use MutationObserver to catch new elements
-        const observer = new MutationObserver(removeWatermark);
-        observer.observe(document.body || document.documentElement, {
-          childList: true,
-          subtree: true
-        });
-      })();
-    </script>
-    <script>
-      // Redirect to hash route if no hash present
-      (function() {
-        if (!window.location.hash) {
-          window.location.replace(window.location.href + '#/');
-        }
-      })();
-    </script>
-    <script type="module" crossorigin src="/assets/index-BIox1dG4.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Bzz9Rpv_.css">
+    <script type="module" crossorigin src="/aql-calculator/assets/index-BIox1dG4.js"></script>
+    <link rel="stylesheet" crossorigin href="/aql-calculator/assets/index-Bzz9Rpv_.css">
   </head>
 
   <body>
