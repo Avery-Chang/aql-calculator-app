@@ -17,6 +17,24 @@
       src="%VITE_ANALYTICS_ENDPOINT%/umami"
       data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"
     ></script>
+    <style>
+      /* Hide Manus watermark - positioned at bottom right */
+      button:has(svg):has(*[class*="manus"]),
+      a:has(svg):has(*[class*="manus"]),
+      [class*="watermark"],
+      [id*="watermark"],
+      button[style*="position: fixed"][style*="bottom"],
+      a[style*="position: fixed"][style*="bottom"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+      /* Target elements containing "Made with Manus" text */
+      *:has(> *:only-child):has(*:contains("Made with")),
+      *:has(> *:only-child):has(*:contains("Manus")) {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body>
