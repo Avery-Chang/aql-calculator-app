@@ -18,33 +18,70 @@
       data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"
     ></script>
     <style>
-      /* Hide Manus watermark */
-      .manus-watermark-hidden {
+      /* Hide Manus watermark with aggressive CSS */
+      .manus-watermark-hidden,
+      button[style*="position: fixed"],
+      a[style*="position: fixed"],
+      div[style*="position: fixed"][style*="bottom"],
+      button[style*="z-index"][style*="bottom"],
+      a[style*="z-index"][style*="bottom"] {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
         pointer-events: none !important;
+      }
+      
+      /* Hide by position - target bottom right corner */
+      body > *:last-child:not(#root):not(script) {
+        display: none !important;
+      }
+      
+      /* Additional aggressive hiding */
+      [class*="watermark"],
+      [id*="watermark"],
+      [class*="badge"],
+      [id*="badge"] {
+        display: none !important;
       }
     </style>
     <script>
       // Remove Manus watermark dynamically
       (function() {
         function removeWatermark() {
-          // Find and hide elements containing "Made with Manus"
-          const allElements = document.querySelectorAll('button, a, div, span');
+          // Method 1: Find and hide elements containing "Made with" or "Manus"
+          const allElements = document.querySelectorAll('*');
           allElements.forEach(el => {
             const text = el.textContent || '';
-            if (text.includes('Made with') || text.includes('Manus')) {
-              // Check if it's in the bottom right corner
+            if (text.includes('Made with') || (text.includes('Manus') && text.length < 50)) {
               const rect = el.getBoundingClientRect();
               const isBottomRight = rect.right > window.innerWidth - 300 && rect.bottom > window.innerHeight - 100;
               
-              if (isBottomRight || el.tagName === 'BUTTON' || el.tagName === 'A') {
-                el.classList.add('manus-watermark-hidden');
+              if (isBottomRight) {
+                el.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
                 if (el.parentElement) {
-                  el.parentElement.classList.add('manus-watermark-hidden');
+                  el.parentElement.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
                 }
               }
+            }
+          });
+          
+          // Method 2: Hide all fixed position elements in bottom right
+          document.querySelectorAll('[style*="position: fixed"], [style*="position:fixed"]').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.bottom > window.innerHeight - 100 && rect.right > window.innerWidth - 300) {
+              el.style.cssText = 'display: none !important;';
+            }
+          });
+          
+          // Method 3: Check Shadow DOM
+          document.querySelectorAll('*').forEach(el => {
+            if (el.shadowRoot) {
+              const shadowElements = el.shadowRoot.querySelectorAll('*');
+              shadowElements.forEach(shadowEl => {
+                if (shadowEl.textContent && (shadowEl.textContent.includes('Made with') || shadowEl.textContent.includes('Manus'))) {
+                  shadowEl.style.cssText = 'display: none !important;';
+                }
+              });
             }
           });
         }
